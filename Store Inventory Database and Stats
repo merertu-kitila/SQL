@@ -1,0 +1,47 @@
+-- Create a store inventory database
+CREATE TABLE inventory (id INTEGER PRIMARY KEY, item TEXT, price INTEGER, quantity INTEGER, category TEXT);
+
+INSERT INTO inventory VALUES
+(1,"Light Wash Ripped Jeans",79.99, 23,"denim"),
+(3,"Reindeer Scarf",9.99, 32, "holiday"),
+(4,"Christmas Candle",11.99,42,"holiday"),
+(5,"Favorite Khakhi Short",12.99,3,"clearance"),
+(6,"Floral Peplum Crop",8.99,4,"clearance"),
+(7,"90's Kid Windbreaker",50.00,31,"outerwear"),
+(8,"Favorite Mom Jeans",86.99,19,"denim"),
+(9,"Leather Bomber Jacket",50.00,22,"outerwear"),
+(10,"Dark Wash Mini",45.99,35,"denim"),
+(11,"Santa Baby Lip Gloss",12.99,56,"holiday"),
+(12,"Navy Flare Sleeve",23.99,17,"tops"),
+(13,"Cosmic Cropped Sweater",39.99,21,"tops"),
+(14,"Bear-ly There Tank",15.99,19,"tops"),
+(15,"Mountain Girl Fleece",44.00,26,"outerwear"),
+(16,"Wherever Whenever Midi",45.69,17,"dresses"),
+(17,"Little Black Number",39.99,29,"dresses"),
+(18,"Pink Elf Gift Wrap",4.99,98,"holiday"),
+(19,"Me-Myself-I Sequin Blouse",29.99,12,"tops"),
+(20,"Rudolph Ears",9.99,8,"holiday"),
+(21,"Selena Maxi",60.00,12,"dresses");
+
+-- display the inventory ordered by item price
+SELECT item,price,quantity,category 
+FROM inventory 
+ORDER BY price desc;
+
+-- what is the average item price by category?
+SELECT category, AVG(price) "average price" 
+FROM inventory 
+GROUP BY category 
+ORDER BY AVG(price) desc;
+
+-- how many items do we have in stock in each category?
+SELECT category, SUM(quantity) "total quantity" 
+FROM inventory 
+GROUP BY category 
+ORDER BY SUM(quantity) desc;
+
+-- which 3 items have the highest revenue potential based on our current supply?
+SELECT item, quantity*price "total revenue if all sold" 
+FROM inventory
+ORDER BY quantity*price desc
+LIMIT 3;
