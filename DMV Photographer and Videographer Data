@@ -1,0 +1,142 @@
+//* Created a table containing info for photographers in the DMV area *//
+
+CREATE TABLE photographers (id INTEGER PRIMARY KEY,
+    fullname TEXT,
+    state TEXT,
+    email TEXT,
+    yrs_experience INTEGER);
+
+INSERT INTO photographers (fullname, state, email, yrs_experience)
+    VALUES ("Richard Mulberry", "Maryland", "contact@richardmullbery.com", 2);
+INSERT INTO photographers (fullname, state, email, yrs_experience)
+    VALUES ("Elva Hansen", "DC", "elva.hansen@gmail.com", 4);
+INSERT INTO photographers (fullname, state, email, yrs_experience)
+    VALUES ("Chris J Peters", "DC", "cjpeters@cjpeters.com", 11);
+INSERT INTO photographers (fullname, state, email, yrs_experience)
+    VALUES ("Wendy Brubaker", "Virginia", "wendy@brubakerphoto.com", 16);
+INSERT INTO photographers (fullname, state, email, yrs_experience)
+    VALUES ("Esteban Hernandez", "Maryland", "stevehernandez@photoguys.com", 7);
+INSERT INTO photographers (fullname, state, email, yrs_experience)
+    VALUES ("Jamila Smith", "Maryland", "jamila@jamilasmithphoto.com", 3);
+INSERT INTO photographers (fullname, state, email, yrs_experience)
+    VALUES ("Renee Bradley", "Virginia", "renee@bradleyhopeproductions.com", 8);
+INSERT INTO photographers (fullname, state, email, yrs_experience)
+    VALUES ("Stan Hawk", "DC", "stan@stanleyhawkphoto.net", 22);
+INSERT INTO photographers (fullname, state, email, yrs_experience)
+    VALUES ("Fotoforever", "DC", "admin@fotoforever.com", 1);
+INSERT INTO photographers (fullname, state, email, yrs_experience)
+    VALUES ("Smith Sisters Photos", "DC", "contact@smithsistersphoto.net", 5);
+
+
+
+
+//* Created a table containing the photographers' specialties and photo styles *//
+
+CREATE TABLE services (id INTEGER PRIMARY KEY,
+    photographer_id INTEGER,
+    top_specialty TEXT,
+    style TEXT);
+
+INSERT INTO services (photographer_id, top_specialty, style)
+    VALUES (1, "weddings", "editorial");
+INSERT INTO services (photographer_id, top_specialty, style)
+    VALUES (2, "weddings", "vintage");
+INSERT INTO services (photographer_id, top_specialty, style)
+    VALUES (3, "weddings", "modern");
+INSERT INTO services (photographer_id, top_specialty, style)
+    VALUES (4, "portrait", "modern");
+INSERT INTO services (photographer_id, top_specialty, style)
+    VALUES (5, "weddings", "classic");
+INSERT INTO services (photographer_id, top_specialty, style)
+    VALUES (6, "weddings", "moody");
+INSERT INTO services (photographer_id, top_specialty, style)
+    VALUES (7, "weddings", "classic");
+INSERT INTO services (photographer_id, top_specialty, style)
+    VALUES (8, "weddings", "vintage");
+INSERT INTO services (photographer_id, top_specialty, style)
+    VALUES (9, "portrait", "editorial");
+INSERT INTO services (photographer_id, top_specialty, style)
+    VALUES (10, "portrait", "warm");
+
+
+
+
+//* Created a table of videographers in the area and the photographers from the database that they prefer to work with *//
+
+CREATE TABLE videographers (id INTEGER PRIMARY KEY, 
+    name TEXT, 
+    preferred_photographer_ID INTEGER,
+    email TEXT);
+
+INSERT INTO videographers (name, preferred_photographer_ID, email)
+    VALUES ("Jenny Rogers", 2, "jenrog2019@gmail.com");
+INSERT INTO videographers (name, preferred_photographer_ID, email)
+    VALUES ("Kyle Smithson-Judd", 7, "ksj@ksjvideo.com");
+INSERT INTO videographers (name, preferred_photographer_ID, email)
+    VALUES ("JM Stevenson", 10, "jmstevie@stevensonvids.com");
+INSERT INTO videographers (name, preferred_photographer_ID, email)
+    VALUES ("Kyndra Walker", 1, "admin@kyndrawalker.com");
+INSERT INTO videographers (name, preferred_photographer_ID, email)
+    VALUES ("Celestia Anagon", 7, "c.anagon@anagon.net");
+INSERT INTO videographers (name, preferred_photographer_ID, email)
+    VALUES ("Valeria Escarra", 9, "v.aneta.2002@gmail.com");
+INSERT INTO videographers (name, preferred_photographer_ID, email)
+    VALUES ("Eric Bladar", 3, "eric.bladar@videocentral.com");
+INSERT INTO videographers (name, preferred_photographer_ID, email)
+    VALUES ("Aaron Westmile", 4, "aw@westmilevideo.com");
+INSERT INTO videographers (name, preferred_photographer_ID, email)
+    VALUES ("Remembered Moments", 5, "anita@rememberedmoments.com");
+INSERT INTO videographers (name, preferred_photographer_ID, email)
+    VALUES ("Haftu Anan", 6, "anan@haftumedia.com");
+INSERT INTO videographers (name, preferred_photographer_ID, email)
+    VALUES ("Alana Monal", 8, "alana@monalmoments.com");
+
+
+
+//* Created a table containing the average cost of a videography package for each of the videographers in our database *//
+
+CREATE TABLE video_costs (id INTEGER PRIMARY KEY, videographer_id INTEGER, avg_cost INTEGER);
+
+INSERT INTO video_costs (videographer_id, avg_cost)
+    VALUES (1, 2500);
+INSERT INTO video_costs (videographer_id, avg_cost)
+    VALUES (2, 3000);
+INSERT INTO video_costs (videographer_id, avg_cost)
+    VALUES (3, 7400);
+INSERT INTO video_costs (videographer_id, avg_cost)
+    VALUES (4, 1200);
+INSERT INTO video_costs (videographer_id, avg_cost)
+    VALUES (5, 2700);
+INSERT INTO video_costs (videographer_id, avg_cost)
+    VALUES (6, 2000);
+INSERT INTO video_costs (videographer_id, avg_cost)
+    VALUES (7, 1000);
+INSERT INTO video_costs (videographer_id, avg_cost)
+    VALUES (8, 500);
+INSERT INTO video_costs (videographer_id, avg_cost)
+    VALUES (9, 6800);
+INSERT INTO video_costs (videographer_id, avg_cost)
+    VALUES (10, 2300);
+INSERT INTO video_costs (videographer_id, avg_cost)
+    VALUES (11, 3300);
+
+
+
+//* Below are some queries utilizing multiple joins *//
+
+//* What are the average package prices for each of the videographers in our system? *//
+SELECT videographers.name, video_costs.avg_cost
+FROM video_costs
+JOIN videographers
+ON video_costs.videographer_id = videographers.id;
+
+
+//* Table containing the videographer names and emails, average cost of their packages, names and emails of their preferred photographer, and their preferred photographer's style *//
+SELECT videographers.name as Videographer_Names, videographers.email as Videographer_Email, video_costs.avg_cost as Videographer_Cost, photographers.fullname as Preferred_Photographer, photographers.email as Photographer_Email, services.style as Photography_Style
+FROM videographers
+JOIN photographers
+ON videographers.preferred_photographer_ID = photographers.id
+JOIN services
+ON photographers.id = services.photographer_ID
+JOIN video_costs
+ON video_costs.videographer_id = videographers.id;
