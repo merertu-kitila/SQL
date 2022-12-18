@@ -1,0 +1,54 @@
+In this code, I'm querying a database that contains multiple tables in it, to quantify statistics about customers and order data for different months.
+
+
+--- 1. How many orders were placed in January?
+
+SELECT DISTINCT COUNT(orderID) 
+FROM BIT_DB.JanSales;
+
+
+--- 2. How many of the orders were for an iPhone?
+
+SELECT DISTINCT COUNT(orderID) 
+FROM BIT_DB.JanSales 
+WHERE Product LIKE "iPhone";
+
+
+---- 3. Select the customer account numbers for all the orders that were placed in February.
+
+SELECT FebSales.orderID, customers.acctnum 
+FROM BIT_DB.FebSales
+LEFT OUTER JOIN BIT_DB.customers
+ON customers.order_id = FebSales.orderID;
+
+
+---- 4. Which product was the cheapest one sold in January, and what was the price?
+
+SELECT product, price 
+FROM BIT_DB.JanSales 
+ORDER BY price asc 
+LIMIT 1;
+
+---- 5. What is the total revenue for each product sold in January? 
+
+SELECT product, SUM(quantity)*price as total_revenue
+FROM BIT_DB.JanSales
+GROUP BY product;
+
+
+---- 6. Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
+
+SELECT product, SUM(quantity)*price, location
+FROM BIT_DB.FebSales
+WHERE location LIKE "548 Lincoln%Seattle%"
+GROUP BY product
+
+
+---- 7. How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers?
+
+SELECT count(DISTINCT customers.acctnum) as Customers_With_Multiple_Orders, 
+  avg(febsales.quantity*febsales.price) as Avg_Spent
+FROM BIT_DB.customers
+LEFT OUTER JOIN BIT_DB.FebSales
+ON customers.order_id = febsales.orderID
+WHERE FebSales.Quantity >2
