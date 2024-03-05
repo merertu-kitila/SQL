@@ -34,31 +34,52 @@ time_signature integer NOT NULL )
 
 ## Sort the top 50 songs on Spotify by popularity rating
 
-SELECT * FROM Spotifydata order by popularity desc;
+SELECT track_name as "Song", artist_name as "Artist", popularity as "Popularity Rating", id as "Top 50 Rank"
+FROM BIT_DB.Spotifydata 
+ORDER BY popularity DESC
+;
 
 
 
-## What were the top 3 most popular songs in the Spotify Top 50?
+## What were the top 5 most popular songs in the Spotify Top 50?
 
-SELECT track_name FROM BIT_DB.spotifydata ORDER BY popularity desc limit 3;
+SELECT ROW_NUMBER() OVER(ORDER BY popularity DESC) AS "Popularity Rank",
+track_name as "Song", artist_name as "Arist" 
+FROM BIT_DB.Spotifydata 
+ORDER BY popularity DESC 
+limit 5
+;
 
 
 
 ## Which artists appeared more than once in the Spotify Top 50?
 
-SELECT artist_name, COUNT(*) as number_of_songs
+SELECT artist_name as Artist, COUNT(*) as "Number of Songs"
 FROM BIT_DB.Spotifydata
 GROUP BY artist_name
 HAVING COUNT(*) >1;
 
 
 
-## 
-SELECT track_name, artist_name, (duration_ms) / 1000 as duration
+##  Duration of Top 20 Songs
+
+SELECT id as Rank, track_name as Song, artist_name as Artist, (duration_ms) / 1000 as "Duration in Seconds"
 FROM BIT_DB.spotifydata
 WHERE id <21;
 
-SELECT avg(popularity) as average_popularity_of_TOP50
+
+
+## What is the overall popularity of the top 50 songs?
+
+SELECT avg(popularity) as "Average Popularity of Spotify's Top 50"
 FROM BIT_DB.Spotifydata;
 
 
+
+## Best dancing songs from Spotify's Top 50
+
+SELECT track_name as Song, artist_name as Artist, (danceability) * 100 as "Danceability Score"
+FROM BIT_DB.spotifydata
+ORDER BY danceability DESC
+limit 10
+;
